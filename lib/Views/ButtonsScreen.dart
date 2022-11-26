@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:signs_app/Controller/ImagesController.dart';
 import 'package:signs_app/Views/Assembly_sign.dart';
 import 'package:signs_app/Views/EmergencySigns.dart';
 import 'package:signs_app/Views/FireAdSign.dart';
+import 'package:signs_app/Views/Navigation_screen.dart';
 import 'package:signs_app/Views/cctv.dart';
 import 'package:signs_app/Views/fire_safty.dart';
 import 'package:signs_app/Views/foodpre.dart';
@@ -14,14 +16,14 @@ import 'package:signs_app/Views/smoking.dart';
 import 'package:signs_app/Views/visitor_sign.dart';
 import 'package:signs_app/Views/warning.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ButtonScreen extends StatefulWidget {
+  const ButtonScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ButtonScreen> createState() => _ButtonScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ButtonScreenState extends State<ButtonScreen> {
   var btn = [
     'Emergency Escape Signs',
     'Assembly Point Signs',
@@ -71,23 +73,27 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  width: 50,
-                  height: 40,
-                  child: SvgPicture.asset('assets/exit.svg'),
+                GestureDetector(
+                  onTap: () {
+                    SystemNavigator.pop();
+                  },
+                  child: Image.asset(
+                    'assets/exit.png',
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 SizedBox(
                   width: 50,
                   height: 50,
                   child: SvgPicture.asset('assets/fav.svg'),
                 ),
-                const SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: Icon(
-                    Icons.share,
-                    size: 40,
-                  ),
+                Image.asset(
+                  'assets/share.png',
+                  width: 45,
+                  height: 45,
+                  fit: BoxFit.cover,
                 ),
               ],
             ),
@@ -106,7 +112,9 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            Get.to(screens[index]);
+                            Get.to(NavigationScreen(
+                              index: index,
+                            ));
                           },
                           child: Column(
                             children: [
@@ -131,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                                   ],
                                 ),
                               ),
-                              Divider(
+                              const Divider(
                                 thickness: 2,
                               )
                             ],

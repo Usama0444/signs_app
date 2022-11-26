@@ -1,122 +1,147 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:signs_app/Views/Assembly_sign.dart';
+import 'package:signs_app/Views/ButtonsScreen.dart';
+import 'package:signs_app/Views/EmergencySigns.dart';
+import 'package:signs_app/Views/FireAdSign.dart';
+import 'package:signs_app/Views/cctv.dart';
+import 'package:signs_app/Views/fire_safty.dart';
+import 'package:signs_app/Views/foodpre.dart';
 import 'package:signs_app/Views/navbarScreens/exit.dart';
 import 'package:signs_app/Views/navbarScreens/index.dart';
 import 'package:signs_app/Views/navbarScreens/left.dart';
 import 'package:signs_app/Views/navbarScreens/right.dart';
 import 'package:signs_app/Views/navbarScreens/share.dart';
+import 'package:signs_app/Views/no_Access.dart';
+import 'package:signs_app/Views/smoking.dart';
+import 'package:signs_app/Views/visitor_sign.dart';
+import 'package:signs_app/Views/warning.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({super.key});
+  int index;
+  NavigationScreen({super.key, required this.index});
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-  int currentIndex = 0;
+  late int currentIndex;
   List<Widget> widgetList = [
-    Exit(),
-    Left(),
-    Index(),
-    Right(),
-    Share(),
+    const EmergencySigns(),
+    const AssemblySign(),
+    const FireAd(),
+    const Visitor(),
+    const FireSafty(),
+    const Smoking(),
+    const NoAccess(),
+    const Warning(),
+    const FoodPre(),
+    const CCTV(),
   ];
-  bool _check = false;
+
   void getScreen(int index) {
-    switch (index) {
-      case 0:
-        setState(() {
-          currentIndex = 0;
-        });
-        break;
-      case 1:
-        if (currentIndex > 0) {
-          setState(() {
-            currentIndex--;
-          });
-        } else {
-          setState(() {
-            currentIndex = 0;
-          });
-        }
-        break;
-      case 2:
-        setState(() {
-          currentIndex = 2;
-        });
-        break;
-      case 3:
-        if (currentIndex < 4 && currentIndex == 0) {
-          setState(() {
-            currentIndex++;
-          });
-        } else {
-          setState(() {
-            currentIndex = 4;
-          });
-        }
-        break;
-      case 4:
-        setState(() {
-          currentIndex = 4;
-        });
-        break;
+    if (index == 0) {
+      SystemNavigator.pop();
+    } else if (index == 1) {
+      if (currentIndex > 0) {
+        currentIndex--;
+      }
+    } else if (index == 2) {
+      Get.to(const ButtonScreen());
+    } else if (index == 3) {
+      if (currentIndex < widgetList.length - 1) {
+        currentIndex++;
+      }
     }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndexInit();
+  }
+
+  currentIndexInit() {
+    currentIndex = widget.index;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: widgetList[currentIndex],
       bottomNavigationBar: Container(
         height: 75,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black26,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             InkWell(
-              onTap:() =>  getScreen(0),
-              child: SvgPicture.asset(
-                "assets/exit.svg",
-                height: 32,
-                width: 32,
+              onTap: () => getScreen(0),
+              child: Image.asset(
+                "assets/exit.png",
+                height: 40,
+                width: 40,
+                fit: BoxFit.cover,
               ),
             ),
             InkWell(
-              onTap:() =>  getScreen(1),
+              onTap: () => getScreen(1),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset("assets/left.svg", height: 32, width: 32),
-                  Text("Prev")
+                  SvgPicture.asset(
+                    "assets/left.svg",
+                    height: 25,
+                    width: 25,
+                    fit: BoxFit.cover,
+                  ),
+                  const Text("Prev")
                 ],
               ),
             ),
             InkWell(
-              onTap:() =>  getScreen(2),
-              child: SvgPicture.asset("assets/index.svg", height: 32, width: 32)),
+                onTap: () => getScreen(2),
+                child: Image.asset(
+                  "assets/index.png",
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                )),
             InkWell(
-              onTap:() =>  getScreen(3),
+              onTap: () => getScreen(3),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SvgPicture.asset("assets/right.svg", height: 32, width: 32),
-                  Text("Next")
+                  SvgPicture.asset(
+                    "assets/right.svg",
+                    height: 25,
+                    width: 25,
+                    fit: BoxFit.cover,
+                  ),
+                  const Text("Next")
                 ],
               ),
             ),
             InkWell(
-              onTap:() =>  getScreen(4),
-              child: SvgPicture.asset("assets/share.svg", height: 32, width: 32))
+                onTap: () => getScreen(4),
+                child: Image.asset(
+                  "assets/share.png",
+                  height: 42,
+                  width: 42,
+                  fit: BoxFit.cover,
+                ))
           ],
         ),
       ),
