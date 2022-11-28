@@ -23,9 +23,17 @@ class _VisitorState extends State<Visitor> {
           child: ListView.builder(
               itemCount: imagesController.visitor.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.visitor[index]),
-                );
+                return index < imagesController.visitor.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.visitor[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

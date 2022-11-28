@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:signs_app/Controller/ImagesController.dart';
 import 'package:signs_app/Views/Assembly_sign.dart';
 import 'package:signs_app/Views/EmergencySigns.dart';
@@ -24,6 +28,9 @@ class ButtonScreen extends StatefulWidget {
 }
 
 class _ButtonScreenState extends State<ButtonScreen> {
+  ScreenshotController screenshotController = ScreenshotController();
+  Uint8List? image;
+
   var btn = [
     'Emergency Escape Signs',
     'Assembly Point Signs',
@@ -63,90 +70,123 @@ class _ButtonScreenState extends State<ButtonScreen> {
     });
   }
 
+  takeScreenshotAndShare() async {
+    await screenshotController.capture(delay: const Duration(milliseconds: 10), pixelRatio: 2.0).then((img) {
+      setState(() {
+        image = img;
+      });
+    });
+
+    final dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File('$dir/screen.png');
+    file.writeAsBytes(image!);
+    await Share.file('esys image', 'esys.png', image!, 'image/png', text: 'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          bottomNavigationBar: Container(
-            height: 60,
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    SystemNavigator.pop();
-                  },
-                  child: Image.asset(
-                    'assets/exit.png',
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
+      child: Screenshot(
+        controller: screenshotController,
+        child: Scaffold(
+            bottomNavigationBar: Container(
+              height: 60,
+              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      SystemNavigator.pop();
+                    },
+                    child: SvgPicture.asset(
+                      "assets/exit.svg",
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: SvgPicture.asset('assets/fav.svg'),
-                ),
-                Image.asset(
-                  'assets/share.png',
-                  width: 45,
-                  height: 45,
-                  fit: BoxFit.cover,
-                ),
-              ],
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: SvgPicture.asset('assets/fav_i.svg'),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      takeScreenshotAndShare();
+                    },
+                    child: SvgPicture.asset(
+                      "assets/share.svg",
+                      height: 40,
+                      width: 40,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          body: isLoading
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Center(child: CircularProgressIndicator()),
-                  ],
-                )
-              : SizedBox(
-                  child: ListView.builder(
-                      itemCount: btn.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Get.to(NavigationScreen(
-                              index: index,
-                            ));
-                          },
-                          child: Column(
+            body: isLoading
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Center(child: CircularProgressIndicator()),
+                    ],
+                  )
+                : SizedBox(
+                    child: ListView.builder(
+                        itemCount: btn.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          return Column(
                             children: [
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    const Icon(
-                                      Icons.outbond,
-                                      color: Colors.red,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      btn[index],
-                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Divider(
-                                thickness: 2,
-                              )
+                              index < btn.length - 1
+                                  ? InkWell(
+                                      onTap: () {
+                                        Get.to(NavigationScreen(
+                                          index: index,
+                                        ));
+                                      },
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 40,
+                                            child: Row(
+                                              children: [
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                const Icon(
+                                                  Icons.outbond,
+                                                  color: Colors.red,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  btn[index],
+                                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Divider(
+                                            thickness: 2,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Image.asset('assets/blog.png'),
+                                        Image.asset('assets/channel.png'),
+                                        Image.asset('assets/rate.png'),
+                                      ],
+                                    )
                             ],
-                          ),
-                        );
-                      }),
-                )),
+                          );
+                        }),
+                  )),
+      ),
     );
   }
 }

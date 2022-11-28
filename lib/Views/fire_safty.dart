@@ -23,9 +23,17 @@ class _FireSaftyState extends State<FireSafty> {
           child: ListView.builder(
               itemCount: imagesController.fireSafty.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.fireSafty[index]),
-                );
+                return index < imagesController.fireSafty.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.fireSafty[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

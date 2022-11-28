@@ -23,9 +23,17 @@ class _WarningState extends State<Warning> {
           child: ListView.builder(
               itemCount: imagesController.warning.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.warning[index]),
-                );
+                return index < imagesController.warning.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.warning[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

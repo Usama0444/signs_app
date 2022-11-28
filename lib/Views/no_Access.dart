@@ -23,9 +23,17 @@ class _NoAccessState extends State<NoAccess> {
           child: ListView.builder(
               itemCount: imagesController.noAccess.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.noAccess[index]),
-                );
+                return index < imagesController.noAccess.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.noAccess[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

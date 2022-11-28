@@ -23,9 +23,17 @@ class _AssemblySignState extends State<AssemblySign> {
           child: ListView.builder(
               itemCount: imagesController.assemblySign.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.assemblySign[index]),
-                );
+                return index < imagesController.assemblySign.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.assemblySign[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

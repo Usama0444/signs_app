@@ -23,9 +23,17 @@ class _FireAdState extends State<FireAd> {
           child: ListView.builder(
               itemCount: imagesController.fireAid.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.fireAid[index]),
-                );
+                return index < imagesController.fireAid.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.fireAid[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

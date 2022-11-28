@@ -23,9 +23,17 @@ class _CCTVState extends State<CCTV> {
           child: ListView.builder(
               itemCount: imagesController.cctv.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.cctv[index]),
-                );
+                return index < imagesController.cctv.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.cctv[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

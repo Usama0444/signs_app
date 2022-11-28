@@ -23,9 +23,17 @@ class _EmergencySignsState extends State<EmergencySigns> {
           child: ListView.builder(
               itemCount: imagesController.emergencySign.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.emergencySign[index]),
-                );
+                return index < imagesController.emergencySign.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.emergencySign[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),

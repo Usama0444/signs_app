@@ -23,9 +23,17 @@ class _SmokingState extends State<Smoking> {
           child: ListView.builder(
               itemCount: imagesController.smoking.length,
               itemBuilder: (context, index) {
-                return SizedBox(
-                  child: Image.asset(imagesController.smoking[index]),
-                );
+                return index < imagesController.smoking.length - 1
+                    ? SizedBox(
+                        child: Image.asset(imagesController.smoking[index]),
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/blog.png'),
+                          Image.asset('assets/channel.png'),
+                          Image.asset('assets/rate.png'),
+                        ],
+                      );
               }),
         ),
       ),
