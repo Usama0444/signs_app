@@ -13,12 +13,14 @@ import 'package:signs_app/Views/EmergencySigns.dart';
 import 'package:signs_app/Views/FireAdSign.dart';
 import 'package:signs_app/Views/Navigation_screen.dart';
 import 'package:signs_app/Views/cctv.dart';
+import 'package:signs_app/Views/favorite.dart';
 import 'package:signs_app/Views/fire_safty.dart';
 import 'package:signs_app/Views/foodpre.dart';
 import 'package:signs_app/Views/no_Access.dart';
 import 'package:signs_app/Views/smoking.dart';
 import 'package:signs_app/Views/visitor_sign.dart';
 import 'package:signs_app/Views/warning.dart';
+import 'package:signs_app/main.dart';
 
 class ButtonScreen extends StatefulWidget {
   const ButtonScreen({super.key});
@@ -44,7 +46,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
     'CCTV Signs',
   ];
 
-  var screens = const [
+  var screens = [
     EmergencySigns(),
     AssemblySign(),
     FireAd(),
@@ -60,14 +62,18 @@ class _ButtonScreenState extends State<ButtonScreen> {
   bool isLoading = true;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    lastScreen();
     controller.fillListWithImagesPath().whenComplete(() {
       setState(() {
         isLoading = false;
-        print('print..........');
+        favIndex = 0;
       });
     });
+  }
+
+  lastScreen() {
+    lastPref?.setString('lastScreen', '/ButtonScreen');
   }
 
   takeScreenshotAndShare() async {
@@ -90,7 +96,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
         controller: screenshotController,
         child: Scaffold(
             bottomNavigationBar: Container(
-              height: 60,
+              height: 50,
               decoration: BoxDecoration(border: Border.all(color: Colors.black)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -101,15 +107,20 @@ class _ButtonScreenState extends State<ButtonScreen> {
                     },
                     child: SvgPicture.asset(
                       "assets/exit.svg",
-                      height: 40,
-                      width: 40,
+                      height: 30,
+                      width: 30,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: SvgPicture.asset('assets/fav_i.svg'),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(const FavoriteScreen());
+                    },
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: SvgPicture.asset('assets/fav_i.svg'),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -117,8 +128,8 @@ class _ButtonScreenState extends State<ButtonScreen> {
                     },
                     child: SvgPicture.asset(
                       "assets/share.svg",
-                      height: 40,
-                      width: 40,
+                      height: 30,
+                      width: 30,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -134,12 +145,12 @@ class _ButtonScreenState extends State<ButtonScreen> {
                   )
                 : SizedBox(
                     child: ListView.builder(
-                        itemCount: btn.length,
+                        itemCount: btn.length + 1,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
-                              index < btn.length - 1
+                              index <= btn.length - 1
                                   ? InkWell(
                                       onTap: () {
                                         Get.to(NavigationScreen(

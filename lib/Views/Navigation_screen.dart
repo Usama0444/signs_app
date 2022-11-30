@@ -20,6 +20,7 @@ import 'package:signs_app/Views/no_Access.dart';
 import 'package:signs_app/Views/smoking.dart';
 import 'package:signs_app/Views/visitor_sign.dart';
 import 'package:signs_app/Views/warning.dart';
+import 'package:signs_app/main.dart';
 
 class NavigationScreen extends StatefulWidget {
   int index;
@@ -35,7 +36,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Uint8List? image;
 
   List<Widget> widgetList = [
-    const EmergencySigns(),
+    EmergencySigns(),
     const AssemblySign(),
     const FireAd(),
     const Visitor(),
@@ -50,15 +51,19 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void getScreen(int index) {
     if (index == 0) {
       SystemNavigator.pop();
+      favIndex = 0;
     } else if (index == 1) {
       if (currentIndex > 0) {
         currentIndex--;
+        favIndex = 0;
       }
     } else if (index == 2) {
       Get.to(const ButtonScreen());
+      favIndex = 0;
     } else if (index == 3) {
       if (currentIndex < widgetList.length - 1) {
         currentIndex++;
+        favIndex = 0;
       }
     } else if (index == 4) {
       takeScreenshotAndShare();
@@ -83,6 +88,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void initState() {
     super.initState();
     currentIndexInit();
+    lastPref?.setString('lastScreen', '/NavigationScreen');
   }
 
   currentIndexInit() {
@@ -95,12 +101,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return Screenshot(
       controller: screenshotController,
       child: Scaffold(
-        // backgroundColor: Colors.white,
-        floatingActionButton: SvgPicture.asset('assets/add_2_fav.svg'),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
         body: widgetList[currentIndex],
         bottomNavigationBar: Container(
-          height: 75,
+          height: 60,
           decoration: const BoxDecoration(
             color: Colors.black26,
           ),
@@ -111,8 +114,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 onTap: () => getScreen(0),
                 child: SvgPicture.asset(
                   "assets/exit.svg",
-                  height: 40,
-                  width: 40,
+                  height: 30,
+                  width: 30,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -136,8 +139,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   onTap: () => getScreen(2),
                   child: SvgPicture.asset(
                     "assets/index.svg",
-                    height: 40,
-                    width: 40,
+                    height: 30,
+                    width: 30,
                     fit: BoxFit.cover,
                   )),
               InkWell(
@@ -160,8 +163,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 onTap: () => getScreen(4),
                 child: SvgPicture.asset(
                   "assets/share.svg",
-                  height: 40,
-                  width: 40,
+                  height: 30,
+                  width: 30,
                   fit: BoxFit.cover,
                 ),
               )
