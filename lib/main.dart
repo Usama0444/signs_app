@@ -6,6 +6,7 @@ import 'package:signs_app/Views/ButtonsScreen.dart';
 import 'package:signs_app/Views/EmergencySigns.dart';
 import 'package:signs_app/Views/FireAdSign.dart';
 import 'package:signs_app/Views/cctv.dart';
+import 'package:signs_app/Views/favorite.dart';
 import 'package:signs_app/Views/fire_safty.dart';
 import 'package:signs_app/Views/foodpre.dart';
 import 'package:signs_app/Views/no_Access.dart';
@@ -23,13 +24,19 @@ SharedPreferences? lastPref;
 int favIndex = 0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
   pref = await SharedPreferences.getInstance();
   lastPref = await SharedPreferences.getInstance();
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final routes = [
     GetPage(name: '/EmergencySigns', page: () => EmergencySigns()),
     GetPage(name: '/AssemblySign', page: () => const AssemblySign()),
@@ -42,15 +49,32 @@ class MyApp extends StatelessWidget {
     GetPage(name: '/FoodPre', page: () => const FoodPre()),
     GetPage(name: '/CCTV', page: () => const CCTV()),
     GetPage(name: '/ButtonScreen', page: () => const ButtonScreen()),
-    GetPage(
-        name: '/NavigationScreen',
-        page: () => NavigationScreen(
-              index: 0,
-            )),
+    GetPage(name: '/FavoriteScreen', page: () => const FavoriteScreen()),
+    GetPage(name: '/NavigationScreen_0', page: () => NavigationScreen(index: 0)),
+    GetPage(name: '/NavigationScreen_1', page: () => NavigationScreen(index: 1)),
+    GetPage(name: '/NavigationScreen_2', page: () => NavigationScreen(index: 2)),
+    GetPage(name: '/NavigationScreen_3', page: () => NavigationScreen(index: 3)),
+    GetPage(name: '/NavigationScreen_4', page: () => NavigationScreen(index: 4)),
+    GetPage(name: '/NavigationScreen_5', page: () => NavigationScreen(index: 5)),
+    GetPage(name: '/NavigationScreen_6', page: () => NavigationScreen(index: 6)),
+    GetPage(name: '/NavigationScreen_7', page: () => NavigationScreen(index: 7)),
+    GetPage(name: '/NavigationScreen_8', page: () => NavigationScreen(index: 8)),
+    GetPage(name: '/NavigationScreen_9', page: () => NavigationScreen(index: 9)),
   ];
+  var controller = Get.put(MakeImagesPath(), permanent: true);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller.fillListWithImagesPath().whenComplete(() {
+      setState(() {
+        favIndex = 0;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var c = Get.put(MakeImagesPath(), permanent: true);
     print('last screen');
     print(lastPref?.getString('lastScreen'));
     return GetMaterialApp(

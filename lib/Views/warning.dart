@@ -22,7 +22,7 @@ class _WarningState extends State<Warning> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/Warning');
+    lastPref?.setString('lastScreen', '/NavigationScreen_7');
   }
 
   @override

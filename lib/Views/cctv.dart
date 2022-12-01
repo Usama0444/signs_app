@@ -21,7 +21,7 @@ class _CCTVState extends State<CCTV> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/CCTV');
+    lastPref?.setString('lastScreen', '/NavigationScreen_9');
   }
 
   @override

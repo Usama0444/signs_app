@@ -23,7 +23,7 @@ class _FireSaftyState extends State<FireSafty> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/FireSafty');
+    lastPref?.setString('lastScreen', '/NavigationScreen_4');
   }
 
   @override

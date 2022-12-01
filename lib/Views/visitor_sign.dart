@@ -22,7 +22,7 @@ class _VisitorState extends State<Visitor> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/Visitor');
+    lastPref?.setString('lastScreen', '/NavigationScreen_3');
   }
 
   @override

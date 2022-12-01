@@ -22,7 +22,7 @@ class _SmokingState extends State<Smoking> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/Smoking');
+    lastPref?.setString('lastScreen', '/NavigationScreen_5');
   }
 
   @override

@@ -58,22 +58,16 @@ class _ButtonScreenState extends State<ButtonScreen> {
     FoodPre(),
     CCTV(),
   ];
-  var controller = Get.put(MakeImagesPath(), permanent: true);
-  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
     lastScreen();
-    controller.fillListWithImagesPath().whenComplete(() {
-      setState(() {
-        isLoading = false;
-        favIndex = 0;
-      });
-    });
   }
 
-  lastScreen() {
-    lastPref?.setString('lastScreen', '/ButtonScreen');
+  lastScreen() async {
+    await lastPref?.setString('lastScreen', '/ButtonScreen');
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   takeScreenshotAndShare() async {
@@ -136,67 +130,60 @@ class _ButtonScreenState extends State<ButtonScreen> {
                 ],
               ),
             ),
-            body: isLoading
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Center(child: CircularProgressIndicator()),
-                    ],
-                  )
-                : SizedBox(
-                    child: ListView.builder(
-                        itemCount: btn.length + 1,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              index <= btn.length - 1
-                                  ? InkWell(
-                                      onTap: () {
-                                        Get.to(NavigationScreen(
-                                          index: index,
-                                        ));
-                                      },
-                                      child: Column(
+            body: SizedBox(
+              child: ListView.builder(
+                  itemCount: btn.length + 1,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        index <= btn.length - 1
+                            ? InkWell(
+                                onTap: () {
+                                  Get.to(NavigationScreen(
+                                    index: index,
+                                  ));
+                                },
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 40,
+                                      child: Row(
                                         children: [
-                                          SizedBox(
-                                            height: 40,
-                                            child: Row(
-                                              children: [
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                const Icon(
-                                                  Icons.outbond,
-                                                  color: Colors.red,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  btn[index],
-                                                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
-                                                ),
-                                              ],
-                                            ),
+                                          const SizedBox(
+                                            width: 5,
                                           ),
-                                          const Divider(
-                                            thickness: 2,
-                                          )
+                                          const Icon(
+                                            Icons.outbond,
+                                            color: Colors.red,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            btn[index],
+                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                                          ),
                                         ],
                                       ),
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
                                     )
-                                  : Column(
-                                      children: [
-                                        Image.asset('assets/blog.png'),
-                                        Image.asset('assets/channel.png'),
-                                        Image.asset('assets/rate.png'),
-                                      ],
-                                    )
-                            ],
-                          );
-                        }),
-                  )),
+                                  ],
+                                ),
+                              )
+                            : Column(
+                                children: [
+                                  Image.asset('assets/blog.png'),
+                                  Image.asset('assets/channel.png'),
+                                  Image.asset('assets/rate.png'),
+                                ],
+                              )
+                      ],
+                    );
+                  }),
+            )),
       ),
     );
   }

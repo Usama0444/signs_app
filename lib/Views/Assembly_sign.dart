@@ -21,7 +21,7 @@ class _AssemblySignState extends State<AssemblySign> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/AssemblySign');
+    lastPref?.setString('lastScreen', '/NavigationScreen_1');
   }
 
   @override

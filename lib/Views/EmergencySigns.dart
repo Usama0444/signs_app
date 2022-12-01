@@ -25,7 +25,7 @@ class _EmergencySignsState extends State<EmergencySigns> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/EmergencySigns');
+    lastPref?.setString('lastScreen', '/NavigationScreen_0');
   }
 
   @override

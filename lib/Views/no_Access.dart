@@ -22,7 +22,7 @@ class _NoAccessState extends State<NoAccess> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/NoAccess');
+    lastPref?.setString('lastScreen', '/NavigationScreen_6');
   }
 
   @override

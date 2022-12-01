@@ -36,10 +36,17 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   var keyValues = [];
 
   getKeysAndValues() async {
-    final keys = pref?.getKeys();
+    List<String> desireKey = [];
+    final keys = pref?.getKeys().toList();
 
     final prefsMap = Map<String, dynamic>();
-    for (String key in keys!) {
+    for (int i = 0; i < keys!.length; i++) {
+      if (keys[i] != 'favIndex' && keys[i] != 'lastScreen') {
+        desireKey.add(keys[i]);
+      }
+    }
+    print('keys $desireKey');
+    for (String key in desireKey) {
       prefsMap[key] = pref?.get(key);
     }
     print(prefsMap);
@@ -59,6 +66,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   void initState() {
     super.initState();
     getKeysAndValues();
+    lastPref?.setString('lastScreen', '/FavoriteScreen');
   }
 
   @override

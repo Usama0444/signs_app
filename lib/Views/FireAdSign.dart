@@ -23,7 +23,7 @@ class _FireAdState extends State<FireAd> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/FireAd');
+    lastPref?.setString('lastScreen', '/NavigationScreen_2');
   }
 
   @override

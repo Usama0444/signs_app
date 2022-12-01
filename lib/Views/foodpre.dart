@@ -23,7 +23,7 @@ class _FoodPreState extends State<FoodPre> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    lastPref?.setString('lastScreen', '/FoodPre');
+    lastPref?.setString('lastScreen', '/NavigationScreen_8');
   }
 
   @override
