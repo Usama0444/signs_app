@@ -1,5 +1,8 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signs_app/Controller/ImagesController.dart';
 import 'package:signs_app/Views/ButtonsScreen.dart';
@@ -14,7 +17,6 @@ import 'package:signs_app/Views/smoking.dart';
 import 'package:signs_app/Views/visitor_sign.dart';
 import 'package:signs_app/Views/warning.dart';
 import 'package:signs_app/test.dart';
-
 import '/Views/Navigation_screen.dart';
 import 'Views/Assembly_sign.dart';
 
@@ -24,8 +26,10 @@ SharedPreferences? lastPref;
 int favIndex = 0;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   pref = await SharedPreferences.getInstance();
   lastPref = await SharedPreferences.getInstance();
+
   runApp(MyApp());
 }
 
@@ -64,7 +68,6 @@ class _MyAppState extends State<MyApp> {
   var controller = Get.put(MakeImagesPath(), permanent: true);
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.fillListWithImagesPath().whenComplete(() {
       setState(() {
@@ -73,14 +76,55 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // admob app id =>       ca-app-pub-4786397319871736~7678346366
+  // banner ad unit id =>  ca-app-pub-4786397319871736/6034926353
   @override
   Widget build(BuildContext context) {
-    print('last screen');
-    print(lastPref?.getString('lastScreen'));
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: routes,
       initialRoute: lastPref?.getString('lastScreen') != null ? '${lastPref?.getString('lastScreen')}' : '/ButtonScreen',
+      // home: Test(),
+    );
+  }
+}
+
+BannerAd? banner;
+
+class Test extends StatefulWidget {
+  const Test({super.key});
+
+  @override
+  State<Test> createState() => _TestState();
+}
+
+class _TestState extends State<Test> {
+  @override
+  void initState() {
+    super.initState();
+    banner = BannerAd(
+      size: AdSize.banner,
+      adUnitId: 'ca-app-pub-4786397319871736/7079079550',
+      request: AdRequest(),
+      listener: const BannerAdListener(),
+    );
+    banner?.load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: banner!.size.height.toDouble(),
+            width: banner!.size.width.toDouble(),
+            child: AdWidget(ad: banner!),
+          ),
+          Center(child: Text('checking.....')),
+        ],
+      ),
     );
   }
 }

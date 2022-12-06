@@ -4,6 +4,11 @@
         android:label="signs_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
+         <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4786397319871736~8583732915"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
