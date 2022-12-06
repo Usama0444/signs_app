@@ -44,13 +44,7 @@ class _CCTVState extends State<CCTV> {
                                   child: Image.asset(imagesController.cctv[index]),
                                 ),
                               )
-                            : Column(
-                                children: [
-                                  Image.asset('assets/blog.png'),
-                                  Image.asset('assets/channel.png'),
-                                  Image.asset('assets/rate.png'),
-                                ],
-                              ),
+                            : imagesController.linkWidget(),
                         Positioned(
                           bottom: 0,
                           right: 0,

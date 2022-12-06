@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +20,7 @@ import 'package:signs_app/Views/smoking.dart';
 import 'package:signs_app/Views/visitor_sign.dart';
 import 'package:signs_app/Views/warning.dart';
 import 'package:signs_app/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ButtonScreen extends StatefulWidget {
   const ButtonScreen({super.key});
@@ -81,6 +81,14 @@ class _ButtonScreenState extends State<ButtonScreen> {
     File file = File('$dir/screen.png');
     file.writeAsBytes(image!);
     await Share.file('esys image', 'esys.png', image!, 'image/png', text: 'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
+  }
+
+  launchURL(url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -175,9 +183,21 @@ class _ButtonScreenState extends State<ButtonScreen> {
                               )
                             : Column(
                                 children: [
-                                  Image.asset('assets/blog.png'),
-                                  Image.asset('assets/channel.png'),
-                                  Image.asset('assets/rate.png'),
+                                  GestureDetector(
+                                      onTap: () {
+                                        launchURL('https://sherazz.blogspot.com/');
+                                      },
+                                      child: Image.asset('assets/blog.png')),
+                                  GestureDetector(
+                                      onTap: () {
+                                        launchURL('https://www.youtube.com/@WrongBrothersRestoration');
+                                      },
+                                      child: Image.asset('assets/channel.png')),
+                                  GestureDetector(
+                                      onTap: () {
+                                        launchURL('https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
+                                      },
+                                      child: Image.asset('assets/rate.png')),
                                 ],
                               )
                       ],

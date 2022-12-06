@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MakeImagesPath extends GetxController {
   List<String> emergencySign = [];
@@ -95,5 +97,35 @@ class MakeImagesPath extends GetxController {
       }
     }
     update();
+  }
+
+  launchURL(url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Widget linkWidget() {
+    return Column(
+      children: [
+        GestureDetector(
+            onTap: () {
+              launchURL('https://sherazz.blogspot.com/');
+            },
+            child: Image.asset('assets/blog.png')),
+        GestureDetector(
+            onTap: () {
+              launchURL('https://www.youtube.com/@WrongBrothersRestoration');
+            },
+            child: Image.asset('assets/channel.png')),
+        GestureDetector(
+            onTap: () {
+              launchURL('https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
+            },
+            child: Image.asset('assets/rate.png')),
+      ],
+    );
   }
 }

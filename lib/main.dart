@@ -93,7 +93,6 @@ BannerAd? banner;
 
 class Test extends StatefulWidget {
   const Test({super.key});
-
   @override
   State<Test> createState() => _TestState();
 }
@@ -105,7 +104,7 @@ class _TestState extends State<Test> {
     banner = BannerAd(
       size: AdSize.banner,
       adUnitId: 'ca-app-pub-4786397319871736/7079079550',
-      request: AdRequest(),
+      request: const AdRequest(),
       listener: const BannerAdListener(),
     );
     banner?.load();
@@ -117,12 +116,12 @@ class _TestState extends State<Test> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          SizedBox(
             height: banner!.size.height.toDouble(),
             width: banner!.size.width.toDouble(),
             child: AdWidget(ad: banner!),
           ),
-          Center(child: Text('checking.....')),
+          const Center(child: Text('checking.....')),
         ],
       ),
     );
