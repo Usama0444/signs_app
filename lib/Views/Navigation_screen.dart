@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,6 +35,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
   late int currentIndex;
   ScreenshotController screenshotController = ScreenshotController();
   Uint8List? image;
+
+  static const int maxFailedLoadAttempts = 5;
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
 
   List<Widget> widgetList = [
     EmergencySigns(),
@@ -72,7 +77,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   takeScreenshotAndShare() async {
-    await screenshotController.capture(delay: const Duration(milliseconds: 10), pixelRatio: 2.0).then((img) {
+    await screenshotController
+        .capture(delay: const Duration(milliseconds: 10), pixelRatio: 2.0)
+        .then((img) {
       setState(() {
         image = img;
       });
@@ -81,12 +88,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
     final dir = (await getApplicationDocumentsDirectory()).path;
     File file = File('$dir/screen.png');
     file.writeAsBytes(image!);
-    await Share.file('esys image', 'esys.png', image!, 'image/png', text: 'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
+    await Share.file('esys image', 'esys.png', image!, 'image/png',
+        text:
+            'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
   }
 
   @override
   void initState() {
     super.initState();
+    _createInterstitialAd();
     currentIndexInit();
     lastPref?.setString('lastScreen', '/NavigationScreen');
   }
@@ -111,7 +121,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               InkWell(
-                onTap: () => getScreen(0),
+                onTap: () {
+                  _showInterstitialAd();
+                  getScreen(0);
+                },
                 child: SvgPicture.asset(
                   "assets/exit.svg",
                   height: 30,
@@ -120,7 +133,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 ),
               ),
               InkWell(
-                onTap: () => getScreen(1),
+                onTap: () {
+                  _showInterstitialAd();
+                  getScreen(1);
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,7 +152,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 ),
               ),
               InkWell(
-                  onTap: () => getScreen(2),
+                  onTap: () {
+                    _showInterstitialAd();
+                    getScreen(2);
+                  },
                   child: SvgPicture.asset(
                     "assets/index.svg",
                     height: 30,
@@ -144,7 +163,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     fit: BoxFit.cover,
                   )),
               InkWell(
-                onTap: () => getScreen(3),
+                onTap: () {
+                  _showInterstitialAd();
+                  getScreen(3);
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,7 +182,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 ),
               ),
               InkWell(
-                onTap: () => getScreen(4),
+                onTap: () {
+                  _showInterstitialAd();
+                  getScreen(4);
+                },
                 child: SvgPicture.asset(
                   "assets/share.svg",
                   height: 30,
@@ -173,5 +198,50 @@ class _NavigationScreenState extends State<NavigationScreen> {
         ),
       ),
     );
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: "ca-app-pub-3940256099942544/1033173712 ",
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              _createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
   }
 }

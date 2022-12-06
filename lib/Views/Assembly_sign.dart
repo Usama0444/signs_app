@@ -17,6 +17,9 @@ class AssemblySign extends StatefulWidget {
 class _AssemblySignState extends State<AssemblySign> {
   var imagesController = Get.find<MakeImagesPath>();
   TextEditingController favController = TextEditingController();
+  
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -136,8 +139,9 @@ class _AssemblySignState extends State<AssemblySign> {
                       ],
                     ),
                     (index + 1) % 4 == 0 && index != 0
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 70,
+                            
                           )
                         : const SizedBox(
                             height: 10,

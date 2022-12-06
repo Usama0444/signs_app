@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../Controller/ImagesController.dart';
@@ -138,9 +139,27 @@ class _FireAdState extends State<FireAd> {
                       ],
                     ),
                     (index + 1) % 4 == 0 && index != 0
-                        ? const SizedBox(
-                            height: 70,
-                          )
+                        ?  SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: AdWidget(
+                    ad: BannerAd(
+                      
+                      adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                      size: AdSize.largeBanner,
+                      request: AdRequest(),
+                      listener: BannerAdListener(
+                        onAdLoaded: (Ad ad) =>print("Ad loaded"),
+                        onAdFailedToLoad: (Ad ad, LoadAdError error){
+                          ad.dispose();
+                          print("Ad failed to load: $error");
+                        },
+                        onAdOpened: (Ad ad)=>print("Ad opened"),
+                        onAdClosed: (Ad ad)=>print("Ad closed"),
+                      ),
+                    )..load(),
+                  ),
+                        )
                         : const SizedBox(
                             height: 10,
                           ),
