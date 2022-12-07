@@ -139,27 +139,26 @@ class _FireSaftyState extends State<FireSafty> {
                       ],
                     ),
                     (index + 1) % 4 == 0 && index != 0
-                        ?  SizedBox(
-                  height: 100,
-                  width: double.infinity,
-                  child: AdWidget(
-                    ad: BannerAd(
-                      
-                      adUnitId: "ca-app-pub-3940256099942544/6300978111",
-                      size: AdSize.largeBanner,
-                      request: AdRequest(),
-                      listener: BannerAdListener(
-                        onAdLoaded: (Ad ad) =>print("Ad loaded"),
-                        onAdFailedToLoad: (Ad ad, LoadAdError error){
-                          ad.dispose();
-                          print("Ad failed to load: $error");
-                        },
-                        onAdOpened: (Ad ad)=>print("Ad opened"),
-                        onAdClosed: (Ad ad)=>print("Ad closed"),
-                      ),
-                    )..load(),
-                  ),
-                )
+                        ? SizedBox(
+                            height: 100,
+                            width: double.infinity,
+                            child: AdWidget(
+                              ad: BannerAd(
+                                adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                                size: AdSize.largeBanner,
+                                request: AdRequest(),
+                                listener: BannerAdListener(
+                                  onAdLoaded: (Ad ad) => print("Ad loaded"),
+                                  onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                                    ad.dispose();
+                                    print("Ad failed to load: $error");
+                                  },
+                                  onAdOpened: (Ad ad) => print("Ad opened"),
+                                  onAdClosed: (Ad ad) => print("Ad closed"),
+                                ),
+                              )..load(),
+                            ),
+                          )
                         : const SizedBox(
                             height: 10,
                           ),

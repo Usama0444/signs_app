@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:signs_app/Controller/ImagesController.dart';
 import 'package:signs_app/Views/Assembly_sign.dart';
+import 'package:signs_app/Views/ButtonsScreen.dart';
 import 'package:signs_app/Views/EmergencySigns.dart';
 import 'package:signs_app/Views/FireAdSign.dart';
 import 'package:signs_app/Views/Navigation_screen.dart';
@@ -73,6 +74,18 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: (() => Get.offAll(const ButtonScreen())),
+            child: const Icon(
+              Icons.arrow_back,
+              size: 30,
+              color: Colors.black,
+            ),
+          ),
+        ),
         body: isLoading
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,

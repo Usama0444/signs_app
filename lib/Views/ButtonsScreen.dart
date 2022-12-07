@@ -63,7 +63,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
   @override
   void initState() {
     super.initState();
-      _createInterstitialAd();
+    _createInterstitialAd();
     lastScreen();
   }
 
@@ -73,9 +73,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
   }
 
   takeScreenshotAndShare() async {
-    await screenshotController
-        .capture(delay: const Duration(milliseconds: 10), pixelRatio: 2.0)
-        .then((img) {
+    await screenshotController.capture(delay: const Duration(milliseconds: 10), pixelRatio: 2.0).then((img) {
       setState(() {
         image = img;
       });
@@ -84,9 +82,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
     final dir = (await getApplicationDocumentsDirectory()).path;
     File file = File('$dir/screen.png');
     file.writeAsBytes(image!);
-    await Share.file('esys image', 'esys.png', image!, 'image/png',
-        text:
-            'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
+    await Share.file('esys image', 'esys.png', image!, 'image/png', text: 'https://play.google.com/store/apps/details?id=com.signApp.android&hl=en&gl=US');
   }
 
   launchURL(url) async {
@@ -103,15 +99,13 @@ class _ButtonScreenState extends State<ButtonScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
     return SafeArea(
       child: Screenshot(
         controller: screenshotController,
         child: Scaffold(
             bottomNavigationBar: Container(
               height: 50,
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.black)),
+              decoration: BoxDecoration(border: Border.all(color: Colors.black)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -131,7 +125,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
                       Get.to(const FavoriteScreen());
                     },
                     child: SizedBox(
-                      width: 40, 
+                      width: 40,
                       height: 40,
                       child: SvgPicture.asset('assets/fav_i.svg'),
                     ),
@@ -160,11 +154,10 @@ class _ButtonScreenState extends State<ButtonScreen> {
                         index <= btn.length - 1
                             ? InkWell(
                                 onTap: () {
-                                   _showInterstitialAd();
+                                  _showInterstitialAd();
                                   Get.to(NavigationScreen(
                                     index: index,
                                   ));
-                                 
                                 },
                                 child: Column(
                                   children: [
@@ -184,10 +177,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
                                           ),
                                           Text(
                                             btn[index],
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red),
+                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
                                           ),
                                         ],
                                       ),
@@ -202,24 +192,45 @@ class _ButtonScreenState extends State<ButtonScreen> {
                                 children: [
                                   GestureDetector(
                                       onTap: () {
-                                        launchURL(
-                                            'https://sherazz.blogspot.com/');
+                                        launchURL('https://sherazz.blogspot.com/');
                                       },
                                       child: Image.asset('assets/blog.png')),
                                   GestureDetector(
                                       onTap: () {
-                                        launchURL(
-                                            'https://www.youtube.com/@WrongBrothersRestoration');
+                                        launchURL('https://www.youtube.com/@WrongBrothersRestoration');
                                       },
                                       child: Image.asset('assets/channel.png')),
                                   GestureDetector(
                                       onTap: () {
-                                        launchURL(
-                                            'https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
+                                        launchURL('https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
                                       },
                                       child: Image.asset('assets/rate.png')),
                                 ],
+                              ),
+                        (index + 1) % 4 == 0 && index != 0
+                            ? SizedBox(
+                                height: 100,
+                                width: double.infinity,
+                                child: AdWidget(
+                                  ad: BannerAd(
+                                    adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                                    size: AdSize.largeBanner,
+                                    request: AdRequest(),
+                                    listener: BannerAdListener(
+                                      onAdLoaded: (Ad ad) => print("Ad loaded"),
+                                      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                                        ad.dispose();
+                                        print("Ad failed to load: $error");
+                                      },
+                                      onAdOpened: (Ad ad) => print("Ad opened"),
+                                      onAdClosed: (Ad ad) => print("Ad closed"),
+                                    ),
+                                  )..load(),
+                                ),
                               )
+                            : const SizedBox(
+                                height: 10,
+                              ),
                       ],
                     );
                   }),
@@ -230,7 +241,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: "ca-app-pub-3940256099942544/1033173712 ",
+        adUnitId: "ca-app-pub-3940256099942544/1033173712",
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
@@ -256,8 +267,7 @@ class _ButtonScreenState extends State<ButtonScreen> {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (InterstitialAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (InterstitialAd ad) => print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
