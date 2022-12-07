@@ -144,96 +144,120 @@ class _ButtonScreenState extends State<ButtonScreen> {
                 ],
               ),
             ),
-            body: SizedBox(
-              child: ListView.builder(
-                  itemCount: btn.length + 1,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        index <= btn.length - 1
-                            ? InkWell(
-                                onTap: () {
-                                  _showInterstitialAd();
-                                  Get.to(NavigationScreen(
-                                    index: index,
-                                  ));
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(
-                                            width: 5,
+            body: Column(
+              children: [
+                SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: AdWidget(
+                    ad: BannerAd(
+                      adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                      size: AdSize.largeBanner,
+                      request: AdRequest(),
+                      listener: BannerAdListener(
+                        onAdLoaded: (Ad ad) => print("Ad loaded"),
+                        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                          ad.dispose();
+                          print("Ad failed to load: $error");
+                        },
+                        onAdOpened: (Ad ad) => print("Ad opened"),
+                        onAdClosed: (Ad ad) => print("Ad closed"),
+                      ),
+                    )..load(),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: btn.length + 1,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            index <= btn.length - 1
+                                ? InkWell(
+                                    onTap: () {
+                                      _showInterstitialAd();
+                                      Get.to(NavigationScreen(
+                                        index: index,
+                                      ));
+                                    },
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              const Icon(
+                                                Icons.outbond,
+                                                color: Colors.red,
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                btn[index],
+                                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                                              ),
+                                            ],
                                           ),
-                                          const Icon(
-                                            Icons.outbond,
-                                            color: Colors.red,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            btn[index],
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                        const Divider(
+                                          thickness: 2,
+                                        ),
+                                      ],
                                     ),
-                                    const Divider(
-                                      thickness: 2,
-                                    )
-                                  ],
-                                ),
-                              )
-                            : Column(
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {
-                                        launchURL('https://sherazz.blogspot.com/');
-                                      },
-                                      child: Image.asset('assets/blog.png')),
-                                  GestureDetector(
-                                      onTap: () {
-                                        launchURL('https://www.youtube.com/@WrongBrothersRestoration');
-                                      },
-                                      child: Image.asset('assets/channel.png')),
-                                  GestureDetector(
-                                      onTap: () {
-                                        launchURL('https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
-                                      },
-                                      child: Image.asset('assets/rate.png')),
-                                ],
-                              ),
-                        (index + 1) % 4 == 0 && index != 0
-                            ? SizedBox(
-                                height: 100,
-                                width: double.infinity,
-                                child: AdWidget(
-                                  ad: BannerAd(
-                                    adUnitId: "ca-app-pub-3940256099942544/6300978111",
-                                    size: AdSize.largeBanner,
-                                    request: AdRequest(),
-                                    listener: BannerAdListener(
-                                      onAdLoaded: (Ad ad) => print("Ad loaded"),
-                                      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                                        ad.dispose();
-                                        print("Ad failed to load: $error");
-                                      },
-                                      onAdOpened: (Ad ad) => print("Ad opened"),
-                                      onAdClosed: (Ad ad) => print("Ad closed"),
+                                  )
+                                : Column(
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            launchURL('https://sherazz.blogspot.com/');
+                                          },
+                                          child: Image.asset('assets/blog.png')),
+                                      GestureDetector(
+                                          onTap: () {
+                                            launchURL('https://www.youtube.com/@WrongBrothersRestoration');
+                                          },
+                                          child: Image.asset('assets/channel.png')),
+                                      GestureDetector(
+                                          onTap: () {
+                                            launchURL('https://play.google.com/store/apps/details?id=com.starmakerinteractive.starmaker&hl=en');
+                                          },
+                                          child: Image.asset('assets/rate.png')),
+                                    ],
+                                  ),
+                            (index + 1) % 4 == 0 && index != 0
+                                ? SizedBox(
+                                    height: 100,
+                                    width: double.infinity,
+                                    child: AdWidget(
+                                      ad: BannerAd(
+                                        adUnitId: "ca-app-pub-3940256099942544/6300978111",
+                                        size: AdSize.largeBanner,
+                                        request: AdRequest(),
+                                        listener: BannerAdListener(
+                                          onAdLoaded: (Ad ad) => print("Ad loaded"),
+                                          onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                                            ad.dispose();
+                                            print("Ad failed to load: $error");
+                                          },
+                                          onAdOpened: (Ad ad) => print("Ad opened"),
+                                          onAdClosed: (Ad ad) => print("Ad closed"),
+                                        ),
+                                      )..load(),
                                     ),
-                                  )..load(),
-                                ),
-                              )
-                            : const SizedBox(
-                                height: 10,
-                              ),
-                      ],
-                    );
-                  }),
+                                  )
+                                : const SizedBox(
+                                    height: 10,
+                                  ),
+                          ],
+                        );
+                      }),
+                ),
+              ],
             )),
       ),
     );
